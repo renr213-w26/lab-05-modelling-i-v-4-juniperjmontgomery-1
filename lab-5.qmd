@@ -1,6 +1,10 @@
 ---
 title: "Lab 5 - Modelling I"
+author: "Juniper Montgomery"
 categories: "Lab"
+format:
+   pdf:
+      latex-options: draft
 ---
 
 # Introduction
