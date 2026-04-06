@@ -127,12 +127,27 @@ The data are available in `parasites.csv` in your `data` folder.
 Let’s start by reading in the `parasites` data and examining the relationship between `divergence_time` and `parsim`.
 
 a.  Load the data and save the data frame as `parasites`.
+```{r}
+parasites <- read_csv("data/parasites.csv")
+```
 
 b.  Based on the goals of the analysis, what is the response variable?
+"parsim", or the proportion of parasites shared between species.
 
 c.  Visualize the relationship between the two variables.
+```{r}
+ggplot(parasites, aes(x = divergence_time, y = parsim)) + 
+  geom_point() +
+  labs(
+    x = "Divergence Time (millions of years)",
+    y = "Parasite Similarity (proportion shared)",
+    title = "Parasite Similarity by Divergence Time in Primates"
+  ) +
+  theme_minimal()
+```
 
 d.  Use the visualization to describe the relationship between the two variables.
+The graph shows a strong negative relationship between divergence time and parasite similarity. As divergence time increases, parasite similarity increases, so closely related primates tend to share more primates than distantly related ones. However, there is a lot more variability in species with more recent divergence times, which means there are other factors than evolutionary history that can make parasite similarity differ.
 
 ## Question 4
 
