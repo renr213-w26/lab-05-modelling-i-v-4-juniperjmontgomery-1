@@ -79,12 +79,24 @@ $$\widehat{\text{weight}} = 7.27 - 0.59 \times \text{habitsmoker}$$
 ## Question 2
 
 a.  Another researcher is interested in assessing the relationship between babies’ weights and mothers’ ages. Fit another linear model to investigate this relationship. Provide the summary output below.
+```{r}
+babymage <- lm(weight ~ mage, data = births14_habitgiven)
+
+summary(babymage)
+```
+
 
 b.  In 2-3 sentences, explain how the regression line to model these data is fit, i.e., based on what criteria R determines the regression line.
 
+The regression line is determined by the least squares criterion, where R finds the line that minimizes the sum of squared residuals (distance bw observed and predicted data points, in this case the baby birth weights).
+
 c.  Interpret the intercept in the context of the data and the research question. Is the intercept meaningful in this context? Why or why not?
 
+The intercept represents the predicted birth weight when the mom's age is 0, which is definitely not meaningful in this context, since no one can give birth at age 0. 
+
 d.  Interpret the slope in the context of the data and the research question.
+
+The slope represents the change in predicted birth weight for every additional year of the mother's age, where for every 1 year increase in the mother's age, we predict the baby's birth weight to increase by about 0.015lbs on average.
 
 # Part 2 - Parasites
 
