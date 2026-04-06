@@ -221,16 +221,48 @@ The graph shows a clear linear negative relationship between divergence time and
 To answer this question, begin by fitting a linear regression model to each pair of variables. Do not report the model outputs in a tidy format but save each one as `dt_model`, `dist_model`, `BM_model`, and `prec_model`, respectively.
 
 -   `divergence_time` and `transformed_parsim`
+```{r}
+dt_model <- lm(transformed_parsim ~ divergence_time, data = parasites)
+```
 
 -   `distance` and `transformed_parsim`
+```{r}
+dist_model <- lm(transformed_parsim ~ distance, data = parasites)
+```
 
 -   `BMdiff` and `transformed_parsim`
+```{r}
+BM_model <- lm(transformed_parsim ~ BMdiff, data = parasites)
+```
 
 -   `precdiff` and `transformed_parsim`
+```{r}
+prec_model <- lm(transformed_parsim ~ precdiff, data = parasites)
+```
 
 a.  Report the slopes for each of these models. Use proper notation.
+```{r}
+summary(dt_model)
+summary(dist_model)
+summary(BM_model)
+summary(prec_model)
+```
+
+Divergence time: 
+$$\widehat{\text{transformed_parsim}} = 0.368 - 0.091(\text{divergence_time})$$
+
+Distance:
+$$\widehat{\text{transformed_parsim}} = -0.0529 - 0.00027(\text{distance})$$
+
+BMdiff:
+$$\widehat{\text{transformed_parsim}} = -2.696 - 0.000005(\text{BMdiff})$$
+
+precdiff:
+$$\widehat{\text{transformed_parsim}} = -2.532 - 0.006(\text{precdiff})$$
 
 b.  To answer the question of interest, would it be useful to compare the slopes in each model to choose the variable that is the strongest predictor of parasite similarity? Why or why not?
+
+No, because each of these predictors have different units and scales, so their slopes aren't directly comparable.
 
 ## Question 7
 
