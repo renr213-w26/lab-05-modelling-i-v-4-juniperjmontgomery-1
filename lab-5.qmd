@@ -188,14 +188,31 @@ The regression line goes below zero for parasite similarity after ~58 million ye
 Since `parsim` takes values between 0 and 1, we want to transform this variable so that it can range between (−∞,+∞). This will be better suited for fitting a regression model (and interpreting predicted values!)
 
 a.  Using mutate, create a new variable `transformed_parsim` that is calculated as `log(parsim/(1-parsim))`. Add this variable to your data frame.
+```{r}
+parasites <- parasites %>%
+  mutate(transformed_parsim = log(parsim/(1-parsim)))
+```
+
 
     ::: callout-note
     `log()` in R represents the **nautral log**.
     :::
 
 b.  Then, visualize the relationship between divergence_time and `transformed_parsim`. Add a regression line to your visualization.
+```{r}
+ggplot(parasites, aes(x = divergence_time, y = transformed_parsim)) + 
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(
+    x = "Divergence Time (millions of years)",
+    y = "Log-Transformed Parasite Similarity",
+    title = "Log-Transformed Parasite Similarity by Divergence Time in Primates"
+  ) +
+  theme_minimal()
+```
 
 c.  Write a 1-2 sentence description of what you observe in the visualization.
+The graph shows a clear linear negative relationship between divergence time and log-transformed parasite similarity, where the regression line better fits through all the points compared to the untransformed data.
 
 ## Question 6
 
