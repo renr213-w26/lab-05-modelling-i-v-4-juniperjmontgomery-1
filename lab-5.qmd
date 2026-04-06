@@ -40,14 +40,15 @@ library(tidyverse)
 library(openintro)
 ```
 
-
 a.  Create a version of the `births14` data set dropping observations where there are `NA`s for `habit`. You can call this version `births14_habitgiven`.
+
 ```{r}
 births14_habitgiven <- births14 %>%
   filter(!is.na(habit))
 ```
 
 b.  Plotting the data is a useful first step because it helps us quickly visualize trends, identify strong associations, and develop research questions. Create an appropriate plot displaying the relationship between `weight` and `habit`. In 2-3 sentences, discuss the relationships observed.
+
 ```{r}
 ggplot(births14_habitgiven, aes(x = habit, y = weight, fill = habit)) +
   geom_boxplot() +
@@ -59,18 +60,18 @@ ggplot(births14_habitgiven, aes(x = habit, y = weight, fill = habit)) +
   theme_minimal() +
   theme(legend.position = "none")
 ```
+
 This plot shows that the birth weight of babies born to smokers is typically lower than babies born to non-smokers. The median birth weight of babies w/ a smoking mother is lower, and the distribution for smokers is shifted downward compared to non-smoking mothers (with more outliers among the lowest birth weights), suggesting that there is a negative association between the birth weight of babies and the mother's smoking habits. However, there is greater variability (seen by the larger IQR and wider spread) of baby birth weight with smoking mothers, suggesting that there may be other factors at play that affect the baby's birth weight.
 
 c.  Now, fit a linear model that predicts `weight` from `habit`. Provide the tidy summary output below.
+
 ```{r}
 babywh <- lm(weight ~ habit, data = births14_habitgiven)
 
 summary(babywh)
 ```
 
-
-d.  Write the estimated least squares regression line below using proper notation.
-$$\widehat{\text{weight}} = 7.27 - 0.59 \times \text{habitsmoker}$$
+d.  Write the estimated least squares regression line below using proper notation. $$\widehat{\text{weight}} = 7.27 - 0.59(\text{habitsmoker})$$ NOTE: I asked ChatGPT what the proper notation is to add in the "(habitsmoker)" bit, otherwise it looked weird.
 
     ::: callout-tip
     If you need to type an equation using proper notation, type your answers in-between `$$` and `$$`. You may use `\hat{example}` to put a hat on a character.
@@ -79,12 +80,12 @@ $$\widehat{\text{weight}} = 7.27 - 0.59 \times \text{habitsmoker}$$
 ## Question 2
 
 a.  Another researcher is interested in assessing the relationship between babies’ weights and mothers’ ages. Fit another linear model to investigate this relationship. Provide the summary output below.
+
 ```{r}
 babymage <- lm(weight ~ mage, data = births14_habitgiven)
 
 summary(babymage)
 ```
-
 
 b.  In 2-3 sentences, explain how the regression line to model these data is fit, i.e., based on what criteria R determines the regression line.
 
@@ -92,7 +93,7 @@ The regression line is determined by the least squares criterion, where R finds 
 
 c.  Interpret the intercept in the context of the data and the research question. Is the intercept meaningful in this context? Why or why not?
 
-The intercept represents the predicted birth weight when the mom's age is 0, which is definitely not meaningful in this context, since no one can give birth at age 0. 
+The intercept represents the predicted birth weight when the mom's age is 0, which is definitely not meaningful in this context, since no one can give birth at age 0.
 
 d.  Interpret the slope in the context of the data and the research question.
 
@@ -127,14 +128,15 @@ The data are available in `parasites.csv` in your `data` folder.
 Let’s start by reading in the `parasites` data and examining the relationship between `divergence_time` and `parsim`.
 
 a.  Load the data and save the data frame as `parasites`.
+
 ```{r}
 parasites <- read_csv("data/parasites.csv")
 ```
 
-b.  Based on the goals of the analysis, what is the response variable?
-"parsim", or the proportion of parasites shared between species.
+b.  Based on the goals of the analysis, what is the response variable? "parsim", or the proportion of parasites shared between species.
 
 c.  Visualize the relationship between the two variables.
+
 ```{r}
 ggplot(parasites, aes(x = divergence_time, y = parsim)) + 
   geom_point() +
@@ -146,8 +148,7 @@ ggplot(parasites, aes(x = divergence_time, y = parsim)) +
   theme_minimal()
 ```
 
-d.  Use the visualization to describe the relationship between the two variables.
-The graph shows a strong negative relationship between divergence time and parasite similarity. As divergence time increases, parasite similarity increases, so closely related primates tend to share more primates than distantly related ones. However, there is a lot more variability in species with more recent divergence times, which means there are other factors than evolutionary history that can make parasite similarity differ.
+d.  Use the visualization to describe the relationship between the two variables. The graph shows a strong negative relationship between divergence time and parasite similarity. As divergence time increases, parasite similarity increases, so closely related primates tend to share more primates than distantly related ones. However, there is a lot more variability in species with more recent divergence times, which means there are other factors than evolutionary history that can make parasite similarity differ.
 
 ## Question 4
 
@@ -155,11 +156,32 @@ Next, model this relationship.
 
 a.  Fit the model and write the estimated regression equation.
 
+```{r}
+parsim_model <- lm(parsim ~ divergence_time, data = parasites)
+summary(parsim_model)
+```
+
+$$\widehat{\text{parasite similarity}} = 0.379487 - 0.006532(\text{divergence_time})$$
+
 b.  Interpret the slope and the intercept in the context of the data.
+The slope of -0.0065 means that for each 1 million year increase in divergence time, the predicted proportion of parasite similarity decreases by about 0.0065 (or 0.65%) on average. The intercept of 0.379487 means that when divergence time is at 0 million years (either the species is identical or diverged at less than 1 million years), the proportion of parasite similarity is 0.379487 (or 37.9%). 
 
 c.  Recreate the visualization from Question 3, this time adding a regression line to the visualization.
 
+```{r}
+ggplot(parasites, aes(x = divergence_time, y = parsim)) + 
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(
+    x = "Divergence Time (millions of years)",
+    y = "Parasite Similarity (proportion shared)",
+    title = "Parasite Similarity by Divergence Time in Primates"
+  ) +
+  theme_minimal()
+```
+
 d.  What do you notice about the prediction (regression) line that may be strange, particularly for very large divergence times?
+The regression line goes below zero for parasite similarity after ~58 million years, which is impossible since parasite similarity is a proportion between 0 and 1 that cannot be negative. This means that the line is model is only reliable for predicting up to ~58 million years. 
 
 ## Question 5
 
