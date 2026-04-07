@@ -329,7 +329,7 @@ ggplot(gapminder_07, aes(x = gdpPercap, y = lifeExp)) +
   geom_point() +
   labs(
     x = "GDP per capita (USD, inflation-adjusted)",
-    y = "Life Expantacy at Birth (years)",
+    y = "Life Expantacy (years)",
     title = "Life Expectancy vs. GDP per Capita"
   ) +
   theme_minimal()
@@ -345,7 +345,7 @@ ggplot(gapminder_07, aes(x = gdpPercap_log, y = lifeExp)) +
   geom_point() +
   labs(
     x = "Log GDP per capita (USD, inflation-adjusted)",
-    y = "Life Expectancy at Birth (years)",
+    y = "Life Expectancy (years)",
     title = "Life Expectancy vs. Log GDP per Capita"
   ) +
   theme_minimal()
@@ -374,6 +374,8 @@ cor(gapminder_07$lifeExp,gapminder_07$gdpPercap_log)
 ```
 First method has an R^2 value of 0.654449. The second method has a correlation coefficient of 0.8089803, which when squared is 0.6544492, so they match exactly.
 
+NOTE: use of cor() is from Google. This was used with permission from Dr. Armstrong.
+
     -   Interpret R-squared in the context of the data and the research question.
 An R^2 value of 0.654 means that 65.4% of the variation in life expectancy between countries is explained by log GDP per capita. This indicates a moderately strong relationship, where countries with a higher GDP per capita have better health outcomes via life expectancy.
 
@@ -383,9 +385,16 @@ Next, we want to examine if the relationship between GDP and life expectancy tha
 
 a.  **Justification:** Create a scatter plot of `gdpPercap_log` vs. `lifeExp`, where the points are colored by `continent`. Do you think the trend between `gdpPercap_log` and `lifeExp` is different for different continents? Justify your answer with specific features of the plot.
 ```{r}
-
+ggplot(gapminder_07, aes(x = gdpPercap_log, y = lifeExp, colour = continent)) +
+  geom_point() +
+  labs(
+    x = "Log GDP per capita (USD, inflation-adjusted)",
+    y = "Life Expectancy (years)",
+    title = "Life Expectancy vs. Log GDP per Capita by Continent"
+  ) +
+  theme_minimal()
 ```
-
+The general positive trend between GDP and life expectancy holds across all continents, but each continent has a different relationship. Africa has a lower life expectancy with more variability, while Europe and Oceania show stronger relationships sitting at higher life expectancies with higher GDP.
 
 b.  **Model fitting and interpretation:**
 
@@ -394,8 +403,24 @@ b.  **Model fitting and interpretation:**
     -   Interpret the *intercept* of the model, making sure that your interpretation is in the units of the original data (not on log scale).
 
     -   Interpret the *slope* of the model, making sure that your interpretation is in the units of the original data (not on log scale).
+```{r}
+model_additive <- lm(gdpPercap_log ~ lifeExp + continent, data = gapminder_07)
+tidy(model_additive)
+```
+An intercept of 3.2 can be converted by taking e^3.2, giving us 24.5, meaning an African country with a life expectancy of 0 has a GDP of $24.5 USD.
+
+The slope of 0.0781 can be converted by taking e^0.0781, giving us 1.081, meaning that for each 1 year increase in life expectancy, we expect GDP per capita to increase by 8.1%
 
 c.  **Prediction:** Predict the GDP of a country in Asia where the average life expectancy is 70 years old.
+
+log(GDP) = intercept + (lifeExp slope * 70) + continentAsia
+         = 3.2 + (0.0781 × 70) + 0.01028999
+         = 3.2 + 5.467 + 0.01028999
+         = 8.667 + 0.01028999 = 8.67728999
+GDP = e^(8.67728999)
+    = 5868.1223534
+    
+The predicted GDP per capita for an Asian country with a life expectancy of 70 is $5868 USD.
 
 ## Question 10
 
@@ -413,7 +438,7 @@ Then, write a paragraph (4-5 sentences) addressing the following:
 
 -   What are your general take-aways from how this presentation was given?
 
-  I enjoyed Rosling's engagement and enthusiasm for statistics that he brought the audience along with building the graph. The visuals made it easier to understand historical trends, while breaking down the countries into provinces disrupted the narrative of general country status, especially in large countries like China that encompass so much territory and economic diversity.
+  I enjoyed Rosling's engagement and enthusiasm for statistics as showed 200 years of trends between income and life expectancy across 200 countries. The visuals made historical patterns easier to follow, and I found it fascinating to see how the independence of countries influenced these trends. I loved when he broke down large countries into provinces, disrupting the narrative of their general trends, especially in larger countries like China that encompass so much economic diversity across regions. I found this presentation very easy to follow, where my main takeaway is that global development has been positive, with most countries converging towards higher incomes and life expectancies. From the presentation style, I learned that combining animations with a clear narrative can make typically boring concepts like statistics engaging and interesting. 
 
 # Wrap-up
 
