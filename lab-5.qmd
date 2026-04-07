@@ -264,6 +264,7 @@ $$\widehat{\text{transparsim}} = -2.696 - 0.000005(\text{BMdiff})$$
 
 precdiff:
 $$\widehat{\text{transparsim}} = -2.532 - 0.006(\text{precdiff})$$
+NOTE: the names for these are ugly (e.g. transparsim represents transformed_parsim), but I couldn't render the document unless I took out underscores and spaces in their names.
 
 b.  To answer the question of interest, would it be useful to compare the slopes in each model to choose the variable that is the strongest predictor of parasite similarity? Why or why not?
 
@@ -312,30 +313,79 @@ Gapminder is a “fact tank” that uses publicly available world data to produc
 ## Question 8
 
 a.  **Data:** For our analysis, we will only be working with data from 2007. Below, filter the data set so only values from the year 2007 are shown. Save this data set as `gapminder_07` and use it for the remainder of this exercise and the following.
+```{r}
+library(gapminder)
+
+gapminder_07 <- gapminder %>%
+  filter(year == 2007)
+```
+
 
 b.  **Visualization:** We are interested in learning more about GDP, and we’ll start with exploring the relationship between life expectancy and GDP. Create two visualizations:
 
     -   Scatter plot of `gdpPercap` vs. `lifeExp`.
+```{r}
+ggplot(gapminder_07, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  labs(
+    x = "GDP per capita (USD, inflation-adjusted)",
+    y = "Life Expantacy at Birth (years)",
+    title = "Life Expectancy vs. GDP per Capita"
+  ) +
+  theme_minimal()
+```
+
 
     -   Scatter plot of `gdpPercap_log` vs. `lifeExp`, where `gdpPercap_log` is a new variable you add to the data set by taking the natural log of `gdpPercap`.
+```{r}
+gapminder_07 <- gapminder_07 %>%
+  mutate(gdpPercap_log = log(gdpPercap))
+
+ggplot(gapminder_07, aes(x = gdpPercap_log, y = lifeExp)) +
+  geom_point() +
+  labs(
+    x = "Log GDP per capita (USD, inflation-adjusted)",
+    y = "Life Expectancy at Birth (years)",
+    title = "Life Expectancy vs. Log GDP per Capita"
+  ) +
+  theme_minimal()
+```
 
     First describe the relationship between each pair of the variables. Then, comment on which relationship would be better modeled using a linear model, and explain your reasoning.
+    
+Plot 1 shows a very curved/non-linear relationship, where life expectancy initially increases rapidly with increases in GDP until ~$10 000, and then somewhat plateaus. Plot 2 has a more linear relationship, and thus would be better fitted for a linear model since LMs assume linearity, so the log-transformed data would better meet this assumption.
 
 c.  **Model fitting:**
 
     -   Fit a linear model predicting log gross domestic product from life expectancy. Display the tidy summary.
+```{r}
+model_gdpLog <- lm(gdpPercap_log ~ lifeExp, data = gapminder_07)
+
+tidy(model_gdpLog)
+```
 
 d.  **Model evaluation:**
 
     -   Calculate the R-squared of the model using two methods and confirm that the values match: first method is using `glance()` and the other method is based on the value of the correlation coefficient between the two variables.
+```{r}
+glance(model_gdpLog)$r.squared
+
+cor(gapminder_07$lifeExp,gapminder_07$gdpPercap_log)
+```
+First method has an R^2 value of 0.654449. The second method has a correlation coefficient of 0.8089803, which when squared is 0.6544492, so they match exactly.
 
     -   Interpret R-squared in the context of the data and the research question.
+An R^2 value of 0.654 means that 65.4% of the variation in life expectancy between countries is explained by log GDP per capita. This indicates a moderately strong relationship, where countries with a higher GDP per capita have better health outcomes via life expectancy.
 
 ## Question 9
 
 Next, we want to examine if the relationship between GDP and life expectancy that we observed in the previous exercise holds across all continents in our data. We’ll continue to work with logged GDP (`gdpPercap_log`) and data from 2007.
 
 a.  **Justification:** Create a scatter plot of `gdpPercap_log` vs. `lifeExp`, where the points are colored by `continent`. Do you think the trend between `gdpPercap_log` and `lifeExp` is different for different continents? Justify your answer with specific features of the plot.
+```{r}
+
+```
+
 
 b.  **Model fitting and interpretation:**
 
@@ -362,6 +412,8 @@ Then, write a paragraph (4-5 sentences) addressing the following:
 -   What are your general take-aways from this presentation?
 
 -   What are your general take-aways from how this presentation was given?
+
+  I enjoyed Rosling's engagement and enthusiasm for statistics that he brought the audience along with building the graph. The visuals made it easier to understand historical trends, while breaking down the countries into provinces disrupted the narrative of general country status, especially in large countries like China that encompass so much territory and economic diversity.
 
 # Wrap-up
 
