@@ -76,7 +76,7 @@ d.  Write the estimated least squares regression line below using proper notatio
 
 $$\widehat{\text{weight}} = 7.27 - 0.59(\text{habitsmoker})$$ 
 
-NOTE: I asked ChatGPT what the proper notation is to add in the "(habitsmoker)" bit, otherwise it looked weird. I also got \widehat from Chat.
+NOTE: I asked ChatGPT what the proper notation is to add in the "(habitsmoker)" bit, otherwise it looked weird. I also got widehat from Chat.
 
     ::: callout-tip
     If you need to type an equation using proper notation, type your answers in-between `$$` and `$$`. You may use `\hat{example}` to put a hat on a character.
